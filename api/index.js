@@ -13,10 +13,13 @@ import colorRouter from "./routes/colorRoute.js";
 import couponRouter from "./routes/couponRoute.js";
 
 import morgan from "morgan";
+import path from "path";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -38,6 +41,11 @@ app.listen(PORT, () => {
 });
 
 connectToDB();
+
+app.use(express.static(path.join(__dirname, "/seller/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "seller", "dist", "index.html"));
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
